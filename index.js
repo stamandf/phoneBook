@@ -1,29 +1,29 @@
 const express = require('express');
+let persons = require('./data');
 const app = express();
+let morgan = require('morgan');
+
 app.use(express.json());
 
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
+// const requestLogger = (request, response, next) => {
+//   console.log('Method:', request.method);
+//   console.log('Path:', request.path);
+//   console.log('Body:', request.body);
+//   console.log('---');
+//   next();
+// }
+
+app.use(morgan((tokens, req, res) =>{
+  return ([
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.res(req, res, 'content-length'), '-',
+    tokens['response-time'](req, res), 'ms',
+    JSON.stringify(req.body)
+  ].join(' '))
+}))
+// app.use(requestLogger);
+
 const generateId = () => {
     const maxId = persons.length > 0
       ? Math.max(...persons.map(n => n.id))
@@ -53,12 +53,10 @@ app.get('/info', (request, response) => {
     const date = new Date();
     const info = `<p>Phonebook has info for ${persons.length} people</p> \n ${date}`;
     response.send(info);
-    // response.send('<p>Phonebook has info for ${persons.length} people</p>');
     })
     
 app.post('/api/persons', (request, response) => {
 const body = request.body
-console.log('body = ', body);
     if (!body.name) {
         return response.status(400).json({ 
         error: 'name missing' 
@@ -87,6 +85,11 @@ persons = persons.filter(person => person.id !== id)
 
 response.status(204).end()
 })
+
+// const unknownEndpoint = (request, response) => {
+//   response.status(404).send({ error: 'unknown endpoint '});
+// }
+// app.use(unknownEndpoint);
 
 const PORT = 3001
 app.listen(PORT, () => {

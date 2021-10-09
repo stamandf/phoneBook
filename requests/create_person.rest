@@ -10,6 +10,14 @@ POST http://localhost:3001/api/persons/
 Content-Type: application/json
 
 {
+    "name": "Patrick Mercier",
+    "number": "514-287-0085"
+}
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
     "name":"",
     "number": "514-813-2723"
 }
