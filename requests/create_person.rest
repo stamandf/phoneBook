@@ -1,0 +1,25 @@
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name": "Florence St-Amand",
+    "number": "514-813-2723"
+}
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name":"",
+    "number": "514-813-2723"
+}
+###
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name": "Florence St-Amand",
+    "number":""
+}
+###
+DELETE http://localhost:3001/api/persons/3
